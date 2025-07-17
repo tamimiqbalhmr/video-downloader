@@ -1,0 +1,5 @@
+flask==2.2.5
+flask-cors==6.0.0
+yt-dlp
+gunicorn
+ffmpeg==1.4
