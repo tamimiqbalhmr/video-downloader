@@ -1,0 +1,11 @@
+# Ignore MySQL data
+surve/mysql/
+
+# Ignore Docker volumes
+*/volumes/
+
+# Ignore Python cache
+__pycache__/
+
+# Ignore environment files
+.env

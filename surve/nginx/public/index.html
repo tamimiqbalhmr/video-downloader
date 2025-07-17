@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Survey Form</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+    <h1>Survey Form</h1>
+    <form id="surveyForm">
+        <input type="text" id="name" placeholder="Name" required><br>
+        <input type="email" id="email" placeholder="Email" required><br>
+        <textarea id="feedback" placeholder="Feedback" required></textarea><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <h2>ALL</h2>
+    <div id="submissionsContainer">
+        <!-- Data will appear here -->
+    </div>
+
+    <script>
+        // Function to display submissions
+        function displaySubmissions(data) {
+            const container = document.getElementById('submissionsContainer');
+            if (data.length === 0) {
+                container.innerHTML = "<p>No submissions yet.</p>";
+                return;
+            }
+
+            let html = `<table>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Feedback</th>
+                    <th>Date</th>
+                </tr>`;
+
+            data.forEach(item => {
+                html += `
+                <tr>
+                    <td>${item.name}</td>
+                    <td>${item.email}</td>
+                    <td>${item.feedback}</td>
+                    <td>${new Date(item.submission_date).toLocaleString()}</td>
+                </tr>`;
+            });
+
+            html += `</table>`;
+            container.innerHTML = html;
+        }
+
+        // Load submissions on page load
+        fetch('/api/submit.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.data) displaySubmissions(data.data);
+            });
+
+        // Update after form submission
+        document.getElementById("surveyForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const response = await fetch("/api/submit.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: document.getElementById("name").value,
+                    email: document.getElementById("email").value,
+                    feedback: document.getElementById("feedback").value
+                })
+            });
+            const result = await response.json();
+            if (result.success && result.data) {
+                document.getElementById("surveyForm").reset();
+                displaySubmissions(result.data);
+            }
+            alert(result.message || result.error || "Submission complete.");
+        });
+    </script>
+</body>
+</html>
