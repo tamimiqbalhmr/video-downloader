@@ -103,11 +103,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 ${format.ext.toUpperCase()} &middot; ${format.filesize ? formatBytes(format.filesize) : 'Unknown size'}
             </div>
         `;
-        card.addEventListener('click', () => selectFormat(card, format));
+        card.addEventListener('click', () => selectFormat(card, format, type));
         return card;
     }
 
-    function selectFormat(card, format) {
+    function selectFormat(card, format, type) {
         document.querySelectorAll('.format-card').forEach(c => {
             c.classList.remove('selected');
         });
@@ -133,11 +133,20 @@ document.addEventListener('DOMContentLoaded', function() {
             panelQuality.textContent = `${format.ext.toUpperCase()} ${format.abr ? format.abr + 'kbps' : ''}`;
         }
 
+        // Set background color based on type
+        downloadPanel.classList.remove('bg-video', 'bg-audio');
+        if (type === 'video') {
+            downloadPanel.classList.add('bg-video');
+        } else if (type === 'audio') {
+            downloadPanel.classList.add('bg-audio');
+        }
+
         downloadPanel.style.display = 'block';
     }
 
     function resetDownloadPanel() {
         downloadPanel.style.display = 'none';
+        downloadPanel.classList.remove('bg-video', 'bg-audio');
         downloadProgress.style.display = 'none';
         progressBar.style.width = '0%';
         progressText.textContent = '0%';
