@@ -1,3 +1,11 @@
+.download-panel.bg-video {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+    color: #fff;
+}
+.download-panel.bg-audio {
+    background: linear-gradient(135deg, var(--success) 0%, var(--primary) 100%) !important;
+    color: #fff;
+}
 :root {
     --primary: #4285f4;
     --primary-dark: #3367d6;
